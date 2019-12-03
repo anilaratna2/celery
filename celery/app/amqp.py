@@ -512,9 +512,6 @@ class AMQP(object):
     def _create_task_sender(self):
         default_retry = self.app.conf.task_publish_retry
         default_policy = self.app.conf.task_publish_retry_policy
-        #default_delivery_mode = self.app.conf.task_default_delivery_mode
-        #default_queue = self.default_queue
-        #queues = self.queues
         send_before_publish = signals.before_task_publish.send
         before_receivers = signals.before_task_publish.receivers
         send_after_publish = signals.after_task_publish.send
@@ -524,9 +521,7 @@ class AMQP(object):
         sent_receivers = signals.task_sent.receivers
 
         default_evd = self._event_dispatcher
-        #default_exchange = self.default_exchange
 
-        #default_rkey = self.app.conf.task_default_routing_key
         default_serializer = self.app.conf.task_serializer
         default_compressor = self.app.conf.result_compression
 
@@ -652,17 +647,6 @@ class AMQP(object):
             return None
         key = (exchange, routing_key, )
         _config = self.app.conf.broker_producers_config
-
-        # temporary
-        def temporary():
-            def q(_q):
-                return ('', _q, )
-            return {
-                q('q1') : 'amqp://dlj2:dlj2@sys-rabbit-dl-dev-1.bdns.bloomberg.com:30424/rmq-dl-common',
-                q('q2') : 'amqp://rmq-dltest:rmq-dltest@rmq-dltest.rabbitmq.dev.bloomberg.com:30424/rmq-dltest',
-            }
-        _config = temporary()
-
         return _config[key]
 
     def effective_broker_producers_write_url(self, queue=None, exchange=None,
