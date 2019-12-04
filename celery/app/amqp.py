@@ -636,7 +636,7 @@ class AMQP(object):
                 broker url, if broker_producers is enabled and arguments are
                 not None, o/w None
         """
-        if not self.app.conf.broker_producers:
+        if not self.app.conf.CELERY_BROKER_PRODUCERS:
             # enabled per worker --multi-broker
             return None
 
@@ -646,7 +646,7 @@ class AMQP(object):
             # no defaults honored here
             return None
         key = (exchange, routing_key, )
-        _config = self.app.conf.broker_producers_config
+        _config = self.app.conf.CELERY_BROKER_PRODUCERS_CONFIG
         return _config[key]
 
     def effective_broker_producers_write_url(self, queue=None, exchange=None,
